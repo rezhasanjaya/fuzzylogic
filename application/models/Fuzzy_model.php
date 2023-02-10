@@ -2,7 +2,7 @@
 
 class Fuzzy_model extends CI_Model
 {
-   ///CARI MIU
+   
    public function Absence($defuzy){
     if( $defuzy <= 0.3) {
         $Absence = 1.0;
@@ -25,6 +25,7 @@ public function Presence($defuzy){
     return $Presence;
 }
 
+///////////Menentukan Membership
     public function umurDewasa($umur){
         if( $umur <= 29) {
             $umurDewasa = 1;
@@ -145,7 +146,6 @@ public function Presence($defuzy){
         $koles = $this->input->post('cholesterol');
         $std = $this->input->post('st_dep');
         
-/////////////////////////// NENTUIN MIU MASUK RULES YANG MANAAA
 
         $ages = ["dewasa"=> $this->umurDewasa($umur), "manula"=> $this->UmurManula($umur), "lansia"=> $this->UmurLansia($umur)];
         $kolest = ["rendah"=> $this->kolesRendah($koles), "sedang"=> $this->kolesSedang($koles), "tinggi"=> $this->kolesTinggi($koles)];
@@ -271,31 +271,39 @@ public function Presence($defuzy){
                 $alpha = $matching_rules[$i]['alpha'];
                 $hasil = $matching_rules[$i]['hasil'];
                 $z = $matching_rules[$i]['z'];
-                // if ($hasil == "presence") {
-                    $rata2 += $alpha*$z;
-                    $rata += $alpha;
-                // } else if ($hasil == "absence") {
-                //     $rata2 += (1-$alpha)*$z;
-                //     $rata += (1-$alpha);
-                // }
+                
+                $rata2 += $alpha*$z;
+                $rata += $alpha;
                 $defuzzy = $rata2 / $rata;
             }
 
+            // if($alpha == 1){
+            //     $defuzy == 0;
+            // } else if($alpha == 0){
+            //     $defuzy == 1;
+            // } else {
+            //     $defuzzy = $rata2 / $rata;
+            // }
 
+        
         //Hasil
         $Absence =  $this->Absence($defuzzy);
         $Presence = $this->Presence($defuzzy);
-       
-        if ($Presence > $Absence) {
-            $hasil_akhir = "Presence"; 
+
+        
+            if($defuzzy == 0 ){
+            $defuzzy = 1;
+            $hasil_akhir = "Presence";
+        } else if($defuzzy == 1){
+            $defuzzy = 0;
+            $hasil_akhir = "Absence";
         } else {
-            $hasil_akhir = "Absence"; 
+            if ($Presence > $Absence) {
+                $hasil_akhir = "Presence"; 
+            } else {
+                $hasil_akhir = "Absence"; 
+            }
         }
-
-
-        // var_dump($alpha);
-      
-        // die();
 
         $data = [
             "id_predic" => '',
