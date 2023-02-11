@@ -277,14 +277,6 @@ public function Presence($defuzy){
                 $defuzzy = $rata2 / $rata;
             }
 
-            // if($alpha == 1){
-            //     $defuzy == 0;
-            // } else if($alpha == 0){
-            //     $defuzy == 1;
-            // } else {
-            //     $defuzzy = $rata2 / $rata;
-            // }
-
         
         //Hasil
         $Absence =  $this->Absence($defuzzy);
